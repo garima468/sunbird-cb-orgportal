@@ -51,12 +51,14 @@ export class VerifyOtpComponent implements OnInit, OnDestroy {
     this.interval = setInterval(() => {
       if (this.timeLeft > 0) {
         this.timeLeft = this.timeLeft - 1
-        this.timerDiv.nativeElement.innerHTML = `${Math.floor(this.timeLeft / 60)}m: ${this.timeLeft % 60}s`
+        if (this.timerDiv && this.timerDiv.nativeElement) {
+          this.timerDiv.nativeElement.innerHTML = `${Math.floor(this.timeLeft / 60)}m: ${this.timeLeft % 60}s`
+        }
       } else {
         clearInterval(this.interval)
         this.showResendOTP = true
       }
-    },                          1000)
+    }, 1000)
   }
 
   handleCloseModal(): void {
@@ -84,7 +86,7 @@ export class VerifyOtpComponent implements OnInit, OnDestroy {
       .subscribe((_res: any) => {
         this.handleCloseModal()
         this.otpVerified.emit(true)
-      },         (error: HttpErrorResponse) => {
+      }, (error: HttpErrorResponse) => {
         if (!error.ok) {
           this.matSnackbar.open('Unable to verify OTP, please try again later!')
         }
@@ -97,7 +99,7 @@ export class VerifyOtpComponent implements OnInit, OnDestroy {
       .subscribe((_res: any) => {
         this.handleCloseModal()
         this.otpVerified.emit(true)
-      },         (error: HttpErrorResponse) => {
+      }, (error: HttpErrorResponse) => {
         if (!error.ok) {
           this.matSnackbar.open('Unable to verify OTP, please try again later!')
         }
